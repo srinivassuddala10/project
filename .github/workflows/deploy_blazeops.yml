@@ -3,23 +3,11 @@ name: Deploy Python App on EC2
 on:
   workflow_dispatch:
     inputs:
-      PROJECT_ID:
-        description: "Project ID"
-        required: true
-      ORGANIZATION_ID:
-        description: "Organization ID"
-        required: true
       CLOUD_TYPE:
         description: "Cloud Type"
         required: true
-      API_KEY:
-        description: "API Key"
-        required: true
       BLAZEOPS_BASE_URL:
         description: "Base URL for BlazeOps"
-        required: true
-      AGENT_ID:
-        description: "Agent ID"
         required: true
       branch:
         description: "github branch"
