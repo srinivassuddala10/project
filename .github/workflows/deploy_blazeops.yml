@@ -38,14 +38,5 @@ permissions:
   actions: write
 
 
-env:
-  AWS_REGION: us-east-1
-  IMAGE_NAME: blazeops-api
-  ENV: staging
-  IMAGE_TAG: latest
-  AWS_ACCESS_KEY_ID: ${{ fromJson(github.event.inputs.aws_config).access_key }}
-  AWS_SECRET_ACCESS_KEY: ${{ fromJson(github.event.inputs.aws_config).secret_key }}
-  AWS_ACCOUNT_ID: ${{ fromJson(github.event.inputs.aws_config).aws_account_id }}
-
 
   
