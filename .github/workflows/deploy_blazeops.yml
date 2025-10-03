@@ -1,0 +1,72 @@
+name: Version 2 Deploy main application infrastructure and application itself.
+
+on:
+  # push:
+  #   branches:
+  #     - master
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to deploy"
+        required: true
+        default: "master"
+      trigger_workflow:
+        description: "Trigger workflow ?"
+        required: true
+        type: choice
+        options:
+          - "yes"
+          - "no"
+
+jobs:
+  deploy_main_application_backend_v2:
+    runs-on: [self-hosted, ec2]
+
+    env:
+      TERRAFORM_VERSION: 1.5.7
+
+    steps:
+      - name: Checkout repository (infra code)
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: Get latest commit SHA
+        run: |
+          COMMIT_SHA=$(git rev-parse HEAD)
+          echo "COMMIT_SHA=$COMMIT_SHA" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Store AWS Credentials Securely
+        run: |
+          echo "AWS_ACCOUNT_ID=118293630210" >> $GITHUB_ENV
+          echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY_ID=AKIARXCWZRUBEHHT2NO5" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=sgWRMLvT3334RpzJToYZfJx2fJLdQDs7QkRQ8M" >> $GITHUB_ENV
+          echo "$GITHUB_ENV"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+      - name: Authenticate with Terraform Cloud
+        env:
+          TF_CLI_CONFIG_FILE: $HOME/.terraformrc
+        run: |
+          echo "credentials \"app.terraform.io\" {
+            token = \"${{ secrets.TF_API_TOKEN }}\"
+          }" > $HOME/.terraformrc
+
+      - name: Set up Node.js ()
+        uses: actions/setup-node@v2
+        with:
+          node-version: 20.10.0
+          registry-url: "https://registry.npmjs.org"
