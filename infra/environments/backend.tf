@@ -2,7 +2,7 @@ terraform {
   backend "s3" {
     bucket  = "blazeops-terraform-state-bucket"
     key     = "state-files/blazeops-staging/terraform.tfstate"
-    region  = "us-west-2"
+    region  = "us-east-1"
     encrypt = true
   }
 }
