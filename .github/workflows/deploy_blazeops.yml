@@ -20,7 +20,8 @@ on:
 
 jobs:
   deploy_main_application_backend_v2:
-    runs-on: [self-hosted, ec2]
+    runs-on: ubuntu-latest
+
 
     env:
       TERRAFORM_VERSION: 1.5.7
